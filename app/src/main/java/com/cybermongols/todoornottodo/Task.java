@@ -1,14 +1,20 @@
 package com.cybermongols.todoornottodo;
 
 public class Task {
+    private int id;
     private String title;
     private boolean important;
     private long deadline;
 
-    public Task(String title, boolean important, long deadline) {
+    public Task(int id, String title, boolean important, long deadline) {
+        this.id = id;
         this.title = title;
         this.important = important;
         this.deadline = deadline;
+    }
+
+    public int getId() {
+        return this.id;
     }
 
     public String getTitle() {

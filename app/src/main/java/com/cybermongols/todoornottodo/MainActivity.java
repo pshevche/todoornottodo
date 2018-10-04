@@ -17,7 +17,6 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Switch;
-import android.widget.TextView;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -48,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         mTaskListView = (SwipeMenuListView) findViewById(R.id.list_todo);
         // init sorting direction for the first db access
         mOrderBy = TaskContract.TaskEntry.COL_TASK_DEADLINE + " ASC, " + TaskContract.TaskEntry.COL_TASK_IMPORTANT + " DESC";
+        initSwipeListView();
         // render ui
         updateUI();
     }
@@ -99,6 +99,47 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void initSwipeListView() {
+        SwipeMenuCreator creator = (menu) -> {
+            // create "complete" item
+            SwipeMenuItem completeItem = new SwipeMenuItem(getApplicationContext());
+            // set item background
+            completeItem.setBackground(new ColorDrawable(Color.rgb(0x5c, 0xd6, 0x5c)));
+            // set item width
+            completeItem.setWidth((int) Math.floor(findViewById(R.id.list_todo).getWidth() * 0.25));
+            // set item's icon
+            completeItem.setIcon(R.drawable.ic_complete_icon);
+            // add to menu
+            menu.addMenuItem(completeItem);
+
+//            // create "edit" item
+//            SwipeMenuItem editItem = new SwipeMenuItem(getApplicationContext());
+//            // set item's background
+//            editItem.setBackground(new ColorDrawable(Color.rgb(0x4d,0xa6, 0xff)));
+//            // set item's width
+//            editItem.setWidth((int)Math.ceil(findViewById(R.id.list_todo).getWidth() * 0.25));
+//            // set item's icon
+//            editItem.setIcon(R.drawable.ic_edit_icon);
+//            // add to menu
+//            menu.addMenuItem(editItem);
+        };
+
+        mTaskListView.setMenuCreator(creator);
+
+        mTaskListView.setOnMenuItemClickListener((int position, SwipeMenu menu, int index) -> {
+            switch (index) {
+                case 0:
+                    completeTask(position);
+                    break;
+                case 1:
+                    Log.d(TAG, "Edit Task: not implemented");
+                    break;
+            }
+            // false : close the menu; true : not close the menu
+            return false;
+        });
+    }
+
     private void updateUI() {
         ArrayList<Task> tasks = new ArrayList<>();
         SQLiteDatabase db = mTaskDbHelper.getReadableDatabase();
@@ -114,10 +155,11 @@ public class MainActivity extends AppCompatActivity {
                 null,
                 mOrderBy);
         while (cursor.moveToNext()) {
+            int idxId = cursor.getColumnIndex(TaskContract.TaskEntry._ID);
             int idxTitle = cursor.getColumnIndex(TaskContract.TaskEntry.COL_TASK_TITLE);
             int idxImportant = cursor.getColumnIndex(TaskContract.TaskEntry.COL_TASK_IMPORTANT);
             int idxDeadline = cursor.getColumnIndex(TaskContract.TaskEntry.COL_TASK_DEADLINE);
-            tasks.add(new Task(cursor.getString(idxTitle), cursor.getInt(idxImportant) != 0, cursor.getLong(idxDeadline)));
+            tasks.add(new Task(cursor.getInt(idxId), cursor.getString(idxTitle), cursor.getInt(idxImportant) != 0, cursor.getLong(idxDeadline)));
         }
 
         if (mTaskAdapter == null) {
@@ -131,78 +173,22 @@ public class MainActivity extends AppCompatActivity {
 
         cursor.close();
         db.close();
-
-        SwipeMenuCreator creator = new SwipeMenuCreator() {
-
-            @Override
-            public void create(SwipeMenu menu) {
-                // create "open" item
-                SwipeMenuItem openItem = new SwipeMenuItem(
-                        getApplicationContext());
-                // set item background
-                openItem.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
-                        0xCE)));
-                // set item width
-                openItem.setWidth(170);
-                // set item title
-                openItem.setTitle("Open");
-                // set item title fontsize
-                openItem.setTitleSize(18);
-                // set item title font color
-                openItem.setTitleColor(Color.WHITE);
-                // add to menu
-                menu.addMenuItem(openItem);
-
-                // create "delete" item
-                SwipeMenuItem deleteItem = new SwipeMenuItem(
-                        getApplicationContext());
-                // set item background
-                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
-                        0x3F, 0x25)));
-                // set item width
-                deleteItem.setWidth(170);
-                // set a icon
-                deleteItem.setIcon(R.drawable.ic_delete);
-                // add to menu
-                menu.addMenuItem(deleteItem);
-            }
-        };
-
-        mTaskListView.setMenuCreator(creator);
-
-        mTaskListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
-                switch (index) {
-                    case 0:
-                        Log.d(TAG, "onMenuItemClick: " + index);
-                        break;
-                    case 1:
-                        Log.d(TAG, "onMenuItemClick: " + index);
-                        break;
-                }
-                // false : close the menu; true : not close the menu
-                return false;
-            }
-        });
-    }
-
-    public void completeTask(View view) {
-        View parent = (View) view.getParent();
-        TextView taskTextView = (TextView) parent.findViewById(R.id.task_title);
-        String task = String.valueOf(taskTextView.getText());
-        SQLiteDatabase db = mTaskDbHelper.getWritableDatabase();
-        db.delete(TaskContract.TaskEntry.TABLE,
-                TaskContract.TaskEntry.COL_TASK_TITLE + " = ?",
-                new String[]{task});
-        db.close();
-        updateUI();
     }
 
     public void changeSortMode(View view) {
         mOrderBy = ((Switch) view).isChecked()
                 ? TaskContract.TaskEntry.COL_TASK_IMPORTANT + " DESC, " + TaskContract.TaskEntry.COL_TASK_DEADLINE + " ASC"
                 : TaskContract.TaskEntry.COL_TASK_DEADLINE + " ASC, " + TaskContract.TaskEntry.COL_TASK_IMPORTANT + " DESC";
+        updateUI();
+    }
+
+    private void completeTask(int position) {
+        String taskId = "" + mTaskAdapter.getItem(position).getId();
+        SQLiteDatabase db = mTaskDbHelper.getWritableDatabase();
+        db.delete(TaskContract.TaskEntry.TABLE,
+                TaskContract.TaskEntry._ID + " = ?",
+                new String[]{taskId});
+        db.close();
         updateUI();
     }
 

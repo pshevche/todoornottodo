@@ -30,7 +30,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy");
         task_deadline.setText(df.format(deadline));
         if (task.isImportant()) {
-            convertView.setBackgroundColor(Color.RED);
+            convertView.setBackgroundColor(Color.rgb(0xd8, 0x1b, 0x60));
         } else {
             convertView.setBackgroundColor(Color.TRANSPARENT);
         }

@@ -9,8 +9,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignBottom="@id/task_complete"
-        android:layout_alignTop="@id/task_complete"
         android:orientation="horizontal">
 
         <TextView
@@ -31,15 +29,4 @@
             android:textSize="20sp" />
 
     </LinearLayout>
-
-
-    <Button
-        android:id="@+id/task_complete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:text="Done"
-        android:onClick="completeTask" />
-
 </RelativeLayout>
