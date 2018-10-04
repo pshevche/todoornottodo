@@ -4,8 +4,11 @@ import android.app.Dialog;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,10 +16,13 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.cybermongols.todoornottodo.db.TaskDbHelper;
 
 import java.util.ArrayList;
@@ -27,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     private TaskDbHelper mTaskDbHelper;
-    private ListView mTaskListView;
+    private SwipeMenuListView mTaskListView;
     private TaskAdapter mTaskAdapter;
     private String mOrderBy;
 
@@ -36,10 +42,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // init helper to access database
         mTaskDbHelper = new TaskDbHelper(this);
-        mTaskListView = (ListView) findViewById(R.id.list_todo);
+        // init list view with swipe functionality
+        mTaskListView = (SwipeMenuListView) findViewById(R.id.list_todo);
+        // init sorting direction for the first db access
         mOrderBy = TaskContract.TaskEntry.COL_TASK_DEADLINE + " ASC, " + TaskContract.TaskEntry.COL_TASK_IMPORTANT + " DESC";
-
+        // render ui
         updateUI();
     }
 
@@ -61,9 +70,7 @@ public class MainActivity extends AppCompatActivity {
                 final DatePicker deadlineDatepicker = (DatePicker) dialog.findViewById(R.id.task_deadline);
 
                 final Button addTaskButton = (Button) dialog.findViewById(R.id.add_task_button);
-                addTaskButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                addTaskButton.setOnClickListener((v) -> {
                         String task = String.valueOf(taskEditText.getText());
                         boolean important = importantTaskCheckbox.isChecked();
                         Calendar c = Calendar.getInstance();
@@ -78,14 +85,10 @@ public class MainActivity extends AppCompatActivity {
                         db.close();
                         dialog.cancel();
                         updateUI();
-                    }
                 });
                 final Button closeDialogButton = (Button) dialog.findViewById(R.id.close_dialog_button);
-                closeDialogButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                closeDialogButton.setOnClickListener((v) -> {
                         dialog.cancel();
-                    }
                 });
 
                 dialog.show();
@@ -128,6 +131,60 @@ public class MainActivity extends AppCompatActivity {
 
         cursor.close();
         db.close();
+
+        SwipeMenuCreator creator = new SwipeMenuCreator() {
+
+            @Override
+            public void create(SwipeMenu menu) {
+                // create "open" item
+                SwipeMenuItem openItem = new SwipeMenuItem(
+                        getApplicationContext());
+                // set item background
+                openItem.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
+                        0xCE)));
+                // set item width
+                openItem.setWidth(170);
+                // set item title
+                openItem.setTitle("Open");
+                // set item title fontsize
+                openItem.setTitleSize(18);
+                // set item title font color
+                openItem.setTitleColor(Color.WHITE);
+                // add to menu
+                menu.addMenuItem(openItem);
+
+                // create "delete" item
+                SwipeMenuItem deleteItem = new SwipeMenuItem(
+                        getApplicationContext());
+                // set item background
+                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
+                        0x3F, 0x25)));
+                // set item width
+                deleteItem.setWidth(170);
+                // set a icon
+                deleteItem.setIcon(R.drawable.ic_delete);
+                // add to menu
+                menu.addMenuItem(deleteItem);
+            }
+        };
+
+        mTaskListView.setMenuCreator(creator);
+
+        mTaskListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                switch (index) {
+                    case 0:
+                        Log.d(TAG, "onMenuItemClick: " + index);
+                        break;
+                    case 1:
+                        Log.d(TAG, "onMenuItemClick: " + index);
+                        break;
+                }
+                // false : close the menu; true : not close the menu
+                return false;
+            }
+        });
     }
 
     public void completeTask(View view) {

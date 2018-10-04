@@ -35,7 +35,14 @@
 
     </LinearLayout>
 
-    <ListView
+    <!--<ListView
+        android:id="@+id/list_todo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header"
+        android:layout_marginTop="8px" />-->
+
+    <com.baoyz.swipemenulistview.SwipeMenuListView
         android:id="@+id/list_todo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
