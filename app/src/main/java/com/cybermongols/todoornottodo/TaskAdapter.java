@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class TaskAdapter extends ArrayAdapter<Task> {
 
@@ -26,9 +25,8 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         TextView task_title = convertView.findViewById(R.id.task_title);
         TextView task_deadline = convertView.findViewById(R.id.task_deadline);
         task_title.setText(task.getTitle());
-        Date deadline = new Date(task.getDeadline());
         SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy");
-        task_deadline.setText(df.format(deadline));
+        task_deadline.setText(df.format(task.getDeadline()));
         if (task.isImportant()) {
             convertView.setBackgroundColor(Color.rgb(0xd8, 0x1b, 0x60));
         } else {

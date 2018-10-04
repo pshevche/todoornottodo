@@ -1,16 +1,24 @@
 package com.cybermongols.todoornottodo;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Task {
     private int id;
     private String title;
     private boolean important;
-    private long deadline;
+    private Date deadline;
 
-    public Task(int id, String title, boolean important, long deadline) {
+    public Task(int id, String title, boolean important, String deadline) {
         this.id = id;
         this.title = title;
         this.important = important;
-        this.deadline = deadline;
+        try {
+            this.deadline = (new SimpleDateFormat("yyyy-MM-dd")).parse(deadline);
+        } catch (ParseException e) {
+            this.deadline = new Date();
+        }
     }
 
     public int getId() {
@@ -25,7 +33,7 @@ public class Task {
         return this.important;
     }
 
-    public long getDeadline() {
+    public Date getDeadline() {
         return this.deadline;
     }
 }
