@@ -6,9 +6,40 @@
     android:padding="16px"
     tools:context=".MainActivity">
 
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="Urgent first"
+            android:gravity="center" />
+
+        <Switch
+            android:id="@+id/sort_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_horizontal"
+            android:onClick="changeSortMode" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="Important first"
+            android:gravity="center" />
+
+    </LinearLayout>
+
     <ListView
         android:id="@+id/list_todo"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header"
+        android:layout_marginTop="8px" />
 
 </RelativeLayout>

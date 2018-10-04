@@ -14,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.cybermongols.todoornottodo.db.TaskDbHelper;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private TaskDbHelper mTaskDbHelper;
     private ListView mTaskListView;
     private TaskAdapter mTaskAdapter;
+    private String mOrderBy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         mTaskDbHelper = new TaskDbHelper(this);
         mTaskListView = (ListView) findViewById(R.id.list_todo);
+        mOrderBy = TaskContract.TaskEntry.COL_TASK_DEADLINE + " ASC, " + TaskContract.TaskEntry.COL_TASK_IMPORTANT + " DESC";
 
         updateUI();
     }
@@ -96,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateUI() {
         ArrayList<Task> tasks = new ArrayList<>();
         SQLiteDatabase db = mTaskDbHelper.getReadableDatabase();
+        Switch sortMode = (Switch) findViewById(R.id.sort_mode);
         Cursor cursor = db.query(TaskContract.TaskEntry.TABLE,
                 new String[]{TaskContract.TaskEntry._ID,
                         TaskContract.TaskEntry.COL_TASK_TITLE,
@@ -105,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 null,
                 null,
                 null,
-                null);
+                mOrderBy);
         while (cursor.moveToNext()) {
             int idxTitle = cursor.getColumnIndex(TaskContract.TaskEntry.COL_TASK_TITLE);
             int idxImportant = cursor.getColumnIndex(TaskContract.TaskEntry.COL_TASK_IMPORTANT);
@@ -137,4 +141,12 @@ public class MainActivity extends AppCompatActivity {
         db.close();
         updateUI();
     }
+
+    public void changeSortMode(View view) {
+        mOrderBy = ((Switch) view).isChecked()
+                ? TaskContract.TaskEntry.COL_TASK_IMPORTANT + " DESC, " + TaskContract.TaskEntry.COL_TASK_DEADLINE + " ASC"
+                : TaskContract.TaskEntry.COL_TASK_DEADLINE + " ASC, " + TaskContract.TaskEntry.COL_TASK_IMPORTANT + " DESC";
+        updateUI();
+    }
+
 }
