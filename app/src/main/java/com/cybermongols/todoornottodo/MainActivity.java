@@ -25,7 +25,7 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.cybermongols.todoornottodo.db.TaskDbHelper;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -73,9 +73,8 @@ public class MainActivity extends AppCompatActivity {
                 addTaskButton.setOnClickListener((v) -> {
                         String task = String.valueOf(taskEditText.getText());
                         boolean important = importantTaskCheckbox.isChecked();
-                        Calendar c = Calendar.getInstance();
-                        c.set(deadlineDatepicker.getYear(), deadlineDatepicker.getMonth(), deadlineDatepicker.getDayOfMonth());
-                        long deadline = c.getTimeInMillis();
+                    Date d = new Date(deadlineDatepicker.getYear(), deadlineDatepicker.getMonth(), deadlineDatepicker.getDayOfMonth());
+                    long deadline = d.getTime();
                         SQLiteDatabase db = mTaskDbHelper.getWritableDatabase();
                         ContentValues values = new ContentValues();
                         values.put(TaskContract.TaskEntry.COL_TASK_TITLE, task);
