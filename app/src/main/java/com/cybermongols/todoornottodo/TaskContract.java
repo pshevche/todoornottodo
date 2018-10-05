@@ -4,7 +4,7 @@ import android.provider.BaseColumns;
 
 public class TaskContract {
     public static final String DB_NAME = "com.cybermongols.todoornottodo.db";
-    public static final int DB_VERSION = 4;
+    public static final int DB_VERSION = 5;
 
     public class TaskEntry implements BaseColumns {
         public static final String TABLE = "tasks";

@@ -4,8 +4,6 @@ import android.app.Dialog;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -15,11 +13,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Switch;
 
-import com.baoyz.swipemenulistview.SwipeMenu;
-import com.baoyz.swipemenulistview.SwipeMenuCreator;
-import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.cybermongols.todoornottodo.db.TaskDbHelper;
 
@@ -29,12 +25,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AdapterCallback {
 
     private static final String TAG = "MainActivity";
 
     private TaskDbHelper mTaskDbHelper;
-    private SwipeMenuListView mTaskListView;
+    private ListView mTaskListView;
     private TaskAdapter mTaskAdapter;
     private String mOrderBy;
 
@@ -49,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
         mTaskListView = (SwipeMenuListView) findViewById(R.id.list_todo);
         // init sorting direction for the first db access
         mOrderBy = TaskContract.TaskEntry.COL_TASK_DEADLINE + " ASC, " + TaskContract.TaskEntry.COL_TASK_IMPORTANT + " DESC";
-        initSwipeListView();
+        // init list view
+        mTaskListView = (ListView) findViewById(R.id.list_todo);
         // render ui
         updateUI();
     }
@@ -101,47 +98,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void initSwipeListView() {
-        SwipeMenuCreator creator = (menu) -> {
-            // create "complete" item
-            SwipeMenuItem completeItem = new SwipeMenuItem(getApplicationContext());
-            // set item background
-            completeItem.setBackground(new ColorDrawable(Color.rgb(0x5c, 0xd6, 0x5c)));
-            // set item width
-            completeItem.setWidth((int) Math.floor(findViewById(R.id.list_todo).getWidth() * 0.25));
-            // set item's icon
-            completeItem.setIcon(R.drawable.ic_complete_icon);
-            // add to menu
-            menu.addMenuItem(completeItem);
-
-            // create "edit" item
-            SwipeMenuItem editItem = new SwipeMenuItem(getApplicationContext());
-            // set item's background
-            editItem.setBackground(new ColorDrawable(Color.rgb(0x4d, 0xa6, 0xff)));
-            // set item's width
-            editItem.setWidth((int) Math.ceil(findViewById(R.id.list_todo).getWidth() * 0.25));
-            // set item's icon
-            editItem.setIcon(R.drawable.ic_edit_icon);
-            // add to menu
-            menu.addMenuItem(editItem);
-        };
-
-        mTaskListView.setMenuCreator(creator);
-
-        mTaskListView.setOnMenuItemClickListener((int position, SwipeMenu menu, int index) -> {
-            switch (index) {
-                case 0:
-                    completeTask(position);
-                    break;
-                case 1:
-                    editTask(position);
-                    break;
-            }
-            // false : close the menu; true : not close the menu
-            return false;
-        });
-    }
-
     private void updateUI() {
         ArrayList<Task> tasks = new ArrayList<>();
         SQLiteDatabase db = mTaskDbHelper.getReadableDatabase();
@@ -165,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (mTaskAdapter == null) {
-            mTaskAdapter = new TaskAdapter(this, tasks);
+            mTaskAdapter = new TaskAdapter(this, tasks, this);
             mTaskListView.setAdapter(mTaskAdapter);
         } else {
             mTaskAdapter.clear();
@@ -184,8 +140,9 @@ public class MainActivity extends AppCompatActivity {
         updateUI();
     }
 
-    private void completeTask(int position) {
-        String taskId = "" + mTaskAdapter.getItem(position).getId();
+    @Override
+    public void completeTask(Task task) {
+        String taskId = "" + task.getId();
         SQLiteDatabase db = mTaskDbHelper.getWritableDatabase();
         db.delete(TaskContract.TaskEntry.TABLE,
                 TaskContract.TaskEntry._ID + " = ?",
@@ -194,8 +151,8 @@ public class MainActivity extends AppCompatActivity {
         updateUI();
     }
 
-    private void editTask(int position) {
-        Task currentTask = mTaskAdapter.getItem(position);
+    @Override
+    public void editTask(Task currentTask) {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.edit_task_dialog);
         dialog.setTitle("Edit task");

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/task_overflow_complete"
+        android:icon="@drawable/ic_complete_icon"
+        android:title="@string/complete" />
+
+    <item
+        android:id="@+id/task_overflow_edit"
+        android:icon="@drawable/ic_edit_icon"
+        android:title="@string/edit" />
+</menu>

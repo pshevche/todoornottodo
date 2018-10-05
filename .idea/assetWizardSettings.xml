@@ -23,7 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/snap/android-studio/67/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_check_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/snap/android-studio/67/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_more_vert_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -33,7 +33,7 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="ic_complete_icon" />
+                                      <entry key="outputName" value="icon_overflow" />
                                     </map>
                                   </option>
                                 </PersistentState>
