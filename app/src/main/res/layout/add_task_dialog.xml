@@ -36,25 +36,29 @@
         android:checked="false"
         android:text="Important" />
 
-    <Button
-        android:id="@+id/add_task_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/add_important_task_checkbox"
+    <LinearLayout
+        android:layout_below="@id/add_important_task_checkbox"
         android:layout_marginTop="8px"
-        android:text="Add" />
-
-    <Button
-        android:id="@+id/close_add_dialog_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/add_important_task_checkbox"
-        android:layout_marginTop="8px"
-        android:text="Cancel" />
+        android:orientation="vertical">
 
+        <Button
+            android:id="@+id/add_task_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/positive_button_background"
+            android:text="Add"
+            android:textColor="@color/textColor" />
+
+        <Button
+            android:id="@+id/close_add_dialog_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8px"
+            android:background="@drawable/negative_button_background"
+            android:text="Cancel"
+            android:textColor="@color/importantTask" />
+    </LinearLayout>
 
 </RelativeLayout>

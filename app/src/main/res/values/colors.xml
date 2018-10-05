@@ -6,6 +6,6 @@
     <color name="dateColor">#A9A9A9</color>
     <color name="textColor">#00574B</color>
     <color name="normalTask">#00574B</color>
-    <color name="importantTask">#D81B60</color>
-    <color name="taskBackground">#F2F2F2</color>
+    <color name="importantTask">#d81b60</color>
+    <color name="taskBackground">#f2f2f2</color>
 </resources>
