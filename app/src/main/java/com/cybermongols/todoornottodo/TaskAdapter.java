@@ -1,7 +1,8 @@
 package com.cybermongols.todoornottodo;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,17 +12,18 @@ import android.widget.TextView;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.List;
 
-public class TaskAdapter extends ArrayAdapter<Task> {
+class TaskAdapter extends ArrayAdapter<Task> {
 
-    private AdapterCallback mListener;
+    private final AdapterCallback mListener;
 
-    public TaskAdapter(Context context, ArrayList<Task> items, AdapterCallback listener) {
-        super(context, 0, items);
+    public TaskAdapter(Context context, List<Task> tasks, AdapterCallback listener) {
+        super(context, 0, tasks);
         mListener = listener;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public View getView(int position, View convertView, ViewGroup parent) {
         Task task = getItem(position);
         if (convertView == null) {
@@ -30,13 +32,13 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         // inflate view: date + title
         TextView task_title = convertView.findViewById(R.id.task_title);
         TextView task_deadline = convertView.findViewById(R.id.task_deadline);
-        task_title.setText(task.getTitle());
+        task_title.setText(task != null ? task.getTitle() : "");
         SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy");
         task_deadline.setText(df.format(task.getDeadline()));
         if (task.isImportant()) {
-            convertView.setBackgroundColor(Color.rgb(0xd8, 0x1b, 0x60));
+            convertView.setBackground(getContext().getDrawable(R.drawable.important_task_background));
         } else {
-            convertView.setBackgroundColor(Color.TRANSPARENT);
+            convertView.setBackground(getContext().getDrawable(R.drawable.normal_task_background));
         }
 
         View overflow = convertView.findViewById(R.id.task_overflow);
@@ -47,6 +49,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
             Object menuHelper;
             Class[] argTypes;
             try {
+                //noinspection JavaReflectionMemberAccess
                 Field fMenuHelper = PopupMenu.class.getDeclaredField("mPopup");
                 fMenuHelper.setAccessible(true);
                 menuHelper = fMenuHelper.get(popupMenu);

@@ -17,7 +17,10 @@
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:text="Urgent first"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="@color/textColor"
+            android:textStyle="bold" />
 
         <Switch
             android:id="@+id/sort_mode"
@@ -31,22 +34,20 @@
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:text="Important first"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="@color/textColor"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
-    <!--<ListView
+    <ListView
         android:id="@+id/list_todo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/header"
-        android:layout_marginTop="8px" />-->
-
-    <com.baoyz.swipemenulistview.SwipeMenuListView
-        android:id="@+id/list_todo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/header"
-        android:layout_marginTop="8px" />
+        android:layout_marginTop="16px"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="5.0sp" />
 
 </RelativeLayout>

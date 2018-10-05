@@ -4,10 +4,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Task {
-    private int id;
-    private String title;
-    private boolean important;
+class Task {
+    private final int id;
+    private final String title;
+    private final boolean important;
     private Date deadline;
 
     public Task(int id, String title, boolean important, String deadline) {
