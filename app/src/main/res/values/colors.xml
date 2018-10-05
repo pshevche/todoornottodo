@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="dateColor">#A9A9A9</color>
-    <color name="textColor">#00574B</color>
+    <color name="textColor">#00574b</color>
     <color name="normalTask">#00574B</color>
     <color name="importantTask">#d81b60</color>
     <color name="taskBackground">#f2f2f2</color>

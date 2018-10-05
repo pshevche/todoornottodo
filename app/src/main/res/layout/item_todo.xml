@@ -24,7 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
                 android:gravity="center_vertical|left"
-                android:text="Date: "
+                android:text="@string/date"
                 android:textSize="18sp"
                 android:textColor="@color/dateColor"
                 android:textStyle="italic" />
@@ -35,7 +35,7 @@
                 android:layout_height="80dp"
                 android:layout_marginTop="8dp"
                 android:gravity="center_vertical|left"
-                android:text="Title"
+                android:text="@string/title"
                 android:textSize="22sp"
                 android:textColor="@color/textColor"
                 android:maxLines="3"
@@ -48,7 +48,7 @@
             android:layout_height="50dp"
             android:layout_gravity="top|right"
             android:layout_weight="1"
-            android:contentDescription="Overflow Icon"
+            android:contentDescription="@string/overflow_icon"
             android:padding="0dp"
             android:scaleType="center"
             android:src="@drawable/icon_overflow" />

@@ -8,7 +8,7 @@
         android:id="@+id/add_task_edit_text"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="What are you doing next?" />
+        android:hint="@string/what_are_you_doing_next" />
 
     <TextView
         android:id="@+id/add_deadline_title"
@@ -16,7 +16,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/add_task_edit_text"
         android:layout_marginTop="8px"
-        android:text="Deadline:" />
+        android:text="@string/deadline"
+        android:textColor="@color/textColor"
+        android:textSize="18sp" />
 
     <DatePicker
         android:id="@+id/add_task_deadline"
@@ -34,7 +36,9 @@
         android:layout_below="@id/add_task_deadline"
         android:layout_marginTop="8px"
         android:checked="false"
-        android:text="Important" />
+        android:text="@string/important"
+        android:textColor="@color/textColor"
+        android:textSize="18sp" />
 
     <LinearLayout
         android:layout_below="@id/add_important_task_checkbox"
@@ -48,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/positive_button_background"
-            android:text="Add"
+            android:text="@string/add"
             android:textColor="@color/textColor" />
 
         <Button
@@ -57,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8px"
             android:background="@drawable/negative_button_background"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:textColor="@color/importantTask" />
     </LinearLayout>
 

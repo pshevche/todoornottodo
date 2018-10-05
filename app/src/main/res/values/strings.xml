@@ -2,4 +2,16 @@
     <string name="app_name">ToDoOrNotToDo</string>
     <string name="complete">Complete</string>
     <string name="edit">Edit</string>
+    <string name="urgent_first">Urgent first</string>
+    <string name="important_first">Important first</string>
+    <string name="important">Important</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
+    <string name="task_to_be_edited">Task to be edited</string>
+    <string name="deadline">Deadline:</string>
+    <string name="save">Save</string>
+    <string name="what_are_you_doing_next">What are you doing next?</string>
+    <string name="date">Date:</string>
+    <string name="title">Title</string>
+    <string name="overflow_icon">Overflow Icon</string>
 </resources>
